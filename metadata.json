@@ -1,0 +1,6 @@
+{
+  "name": "Chrono Compass: Secrets of the Pyramid",
+  "description": "An ancient Egyptian educational adventure puzzle game combining Sudoku, exploration, sacred artifacts, and cinematic mystery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
