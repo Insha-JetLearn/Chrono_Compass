@@ -68,6 +68,7 @@ export interface GameProgress {
   coins: number;
   collectedArtifacts: string[];
   tutorialCompleted: boolean;
+  prologueSeen?: boolean;
   settings: AudioSettings;
   animationsEnabled: boolean;
   chamberMistakes: Record<number, number>;
@@ -79,7 +80,9 @@ export type ScreenView =
   | 'CHAMBER_MAP'
   | 'GAMEPLAY'
   | 'STORY_INTRO'
+  | 'JOURNAL'
   | 'REWARDS'
   | 'COLLECTION'
   | 'SETTINGS'
   | 'VICTORY';
+

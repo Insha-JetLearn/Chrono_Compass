@@ -26,6 +26,7 @@ interface GameScreenProps {
   onUpdateProgress: (updater: (prev: GameProgress) => GameProgress) => void;
   onGoToMap: () => void;
   onViewCollection: () => void;
+  onViewJournal?: () => void;
   onOpenRules: () => void;
   onChamberComplete: (chamberId: ChamberId, coinsEarned: number, artifactId?: string) => void;
 }
@@ -36,6 +37,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   onUpdateProgress,
   onGoToMap,
   onViewCollection,
+  onViewJournal,
   onOpenRules,
   onChamberComplete
 }) => {
@@ -178,7 +180,23 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         });
       } else {
         audioSystem.playNumberPlaced();
-        setNuruMessage('A harmonious placement! The glyph locks into place.');
+        
+        // Calculate progress percentage of filled non-initial cells
+        const nonInitialCells = grid.filter((c) => !c.initial);
+        const correctPlacedCount = nonInitialCells.filter((c) => (c.row === row && c.col === col ? num === correctVal : c.value === puzzlePreset.solution[c.row][c.col])).length;
+        const progressRatio = nonInitialCells.length > 0 ? correctPlacedCount / nonInitialCells.length : 0;
+
+        if (progressRatio >= 0.75) {
+          setNuruMessage('The chamber resonates with celestial harmony! The Chrono Compass hums in sync with your logic.');
+          setNuruSubMessage('Inscribed on the pediment: "The dawn belongs to those who persevere."');
+        } else if (progressRatio >= 0.5) {
+          setNuruMessage('Half the sacred matrix is locked! Ancient gears rotate behind the sandstone walls.');
+          setNuruSubMessage('The temple recognizes your mathematical wisdom!');
+        } else if (progressRatio >= 0.25) {
+          setNuruMessage('The hieroglyphs flare with blue crystal fire! Symmetry begins to take form.');
+        } else {
+          setNuruMessage('A harmonious placement! The glyph locks into place.');
+        }
       }
 
       const updatedGrid = grid.map((c) => {
@@ -446,6 +464,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           onProceedNext={handleProceedNext}
           onGoToMap={onGoToMap}
           onViewCollection={onViewCollection}
+          onViewJournal={onViewJournal}
         />
       )}
     </div>

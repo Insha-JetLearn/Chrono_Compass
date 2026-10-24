@@ -79,6 +79,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => {
               audioSystem.playTap();
+              setView('JOURNAL');
+            }}
+            className={`flex items-center gap-1.5 transition-colors whitespace-nowrap hover:text-amber-300 cursor-pointer ${
+              currentView === 'JOURNAL' ? 'text-amber-400 font-semibold' : ''
+            }`}
+          >
+            <span>Chronicles</span>
+          </button>
+          <button
+            onClick={() => {
+              audioSystem.playTap();
               onOpenRules();
             }}
             className="flex items-center gap-1.5 transition-colors whitespace-nowrap hover:text-amber-300 cursor-pointer"

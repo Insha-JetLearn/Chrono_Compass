@@ -9,6 +9,7 @@ interface MainMenuProps {
   onContinueExpedition: () => void;
   onOpenMap: () => void;
   onOpenRelics: () => void;
+  onOpenJournal: () => void;
   onOpenRules: () => void;
   onOpenSettings: () => void;
 }
@@ -19,6 +20,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
   onContinueExpedition,
   onOpenMap,
   onOpenRelics,
+  onOpenJournal,
   onOpenRules,
   onOpenSettings
 }) => {
@@ -131,18 +133,30 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             </button>
           </div>
 
-          {/* How to play & Settings */}
-          <div className="grid grid-cols-2 gap-2.5">
+          {/* Chronicles, How to play & Settings */}
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                audioSystem.playTap();
+                onOpenJournal();
+              }}
+              className="py-2 px-2.5 rounded-xl border border-amber-700/40 bg-stone-900/60 hover:bg-stone-800 text-amber-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Chronicles</span>
+            </button>
+
             <button
               type="button"
               onClick={() => {
                 audioSystem.playTap();
                 onOpenRules();
               }}
-              className="py-2 px-3 rounded-xl border border-stone-800 bg-stone-900/60 hover:bg-stone-800 text-stone-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="py-2 px-2.5 rounded-xl border border-stone-800 bg-stone-900/60 hover:bg-stone-800 text-stone-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <BookOpen className="w-3.5 h-3.5 text-stone-400" />
-              <span>How to Play</span>
+              <span>Codex</span>
             </button>
 
             <button
@@ -151,7 +165,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
                 audioSystem.playTap();
                 onOpenSettings();
               }}
-              className="py-2 px-3 rounded-xl border border-stone-800 bg-stone-900/60 hover:bg-stone-800 text-stone-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="py-2 px-2.5 rounded-xl border border-stone-800 bg-stone-900/60 hover:bg-stone-800 text-stone-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <Settings className="w-3.5 h-3.5 text-stone-400" />
               <span>Settings</span>

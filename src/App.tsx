@@ -18,6 +18,8 @@ import { SacredRulesModal } from './components/SacredRulesModal';
 import { SettingsModal } from './components/SettingsModal';
 import { InteractiveTutorial } from './components/InteractiveTutorial';
 import { VictoryScreen } from './components/VictoryScreen';
+import { ExpeditionJournal } from './components/ExpeditionJournal';
+import { PrologueModal } from './components/PrologueModal';
 
 export default function App() {
   const [progress, setProgress] = useState<GameProgress>(loadGameProgress);
@@ -28,6 +30,7 @@ export default function App() {
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showPrologueModal, setShowPrologueModal] = useState(false);
 
   // Sync settings to Audio System
   useEffect(() => {
@@ -93,11 +96,15 @@ export default function App() {
   // Navigation handlers
   const handleBeginExpedition = useCallback(() => {
     setActiveChamberId(1);
-    if (!progress.tutorialCompleted) {
-      setShowTutorial(true);
+    if (!progress.prologueSeen) {
+      setShowPrologueModal(true);
+    } else {
+      if (!progress.tutorialCompleted) {
+        setShowTutorial(true);
+      }
+      setCurrentView('STORY_INTRO');
     }
-    setCurrentView('STORY_INTRO');
-  }, [progress.tutorialCompleted]);
+  }, [progress.prologueSeen, progress.tutorialCompleted]);
 
   const handleContinueExpedition = useCallback(() => {
     setActiveChamberId(progress.currentChamber);
@@ -169,6 +176,7 @@ export default function App() {
             onContinueExpedition={handleContinueExpedition}
             onOpenMap={() => setCurrentView('CHAMBER_MAP')}
             onOpenRelics={() => setCurrentView('COLLECTION')}
+            onOpenJournal={() => setCurrentView('JOURNAL')}
             onOpenRules={() => setShowRulesModal(true)}
             onOpenSettings={() => setShowSettingsModal(true)}
           />
@@ -197,6 +205,7 @@ export default function App() {
             onUpdateProgress={setProgress}
             onGoToMap={() => setCurrentView('CHAMBER_MAP')}
             onViewCollection={() => setCurrentView('COLLECTION')}
+            onViewJournal={() => setCurrentView('JOURNAL')}
             onOpenRules={() => setShowRulesModal(true)}
             onChamberComplete={handleChamberComplete}
           />
@@ -206,6 +215,14 @@ export default function App() {
           <ArtifactCollection
             progress={progress}
             onBack={() => setCurrentView('MAIN_MENU')}
+          />
+        )}
+
+        {currentView === 'JOURNAL' && (
+          <ExpeditionJournal
+            progress={progress}
+            onBack={() => setCurrentView('CHAMBER_MAP')}
+            onReplayPrologue={() => setShowPrologueModal(true)}
           />
         )}
 
@@ -242,6 +259,27 @@ export default function App() {
           onSkip={() => {
             setShowTutorial(false);
             setProgress((prev) => ({ ...prev, tutorialCompleted: true }));
+          }}
+        />
+      )}
+
+      {showPrologueModal && (
+        <PrologueModal
+          onFinish={() => {
+            setShowPrologueModal(false);
+            setProgress((prev) => ({ ...prev, prologueSeen: true }));
+            if (!progress.tutorialCompleted) {
+              setShowTutorial(true);
+            }
+            setCurrentView('STORY_INTRO');
+          }}
+          onSkip={() => {
+            setShowPrologueModal(false);
+            setProgress((prev) => ({ ...prev, prologueSeen: true }));
+            if (!progress.tutorialCompleted) {
+              setShowTutorial(true);
+            }
+            setCurrentView('STORY_INTRO');
           }}
         />
       )}
